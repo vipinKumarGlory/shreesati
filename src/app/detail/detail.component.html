@@ -1,0 +1,670 @@
+<ng-container *ngIf="pageLoaded | async">
+  <div class="aa-product-inner">
+    <!-- start prduct navigation -->
+    <!-- <nav class="" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="#">Home</a></li>
+          <li class="breadcrumb-item active" aria-current="page">Library</li>
+        </ol>
+      </nav> -->
+    <ul class="nav nav-tabs aa-products-tab p-0">
+      <li>
+        <a href="#" routerLink="/home" data-toggle="tab"
+          ><i class="fa fa-home"></i
+        ></a>
+      </li>
+      <li class="active">
+        <a href="#" data-toggle="tab">{{ pageDetail.name }}</a>
+      </li>
+    </ul>
+  </div>
+
+  <ng-container
+    *ngIf="
+      pageDetail.pageType === 'About Us' ||
+      pageDetail.pageType === 'Information (Page & Menu)' ||
+      pageDetail.pageType === 'Information (Page)' ||
+      pageDetail.pageType === 'Information (Footer Link)'
+    "
+  >
+    <div class="container p-2">
+      <div class="row">
+        <div class="col-md-12">
+          <div [innerHTML]="pageDetail.description | safeHtml"></div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+  <ng-container
+    *ngIf="
+      pageDetail.pageType === 'Category' ||
+      pageDetail.pageType === 'Product Section'
+    "
+  >
+    <section id="aa-product-category">
+      <div class="container">
+        <div class="row">
+          <!-- col-md-push-3 -->
+          <div class="col-lg-9 col-md-9 col-sm-8 col-md-push-3">
+            <div class="aa-product-catg-content">
+              <!-- <div class="aa-product-catg-head">
+                <div class="aa-product-catg-head-left">
+                  <form action="" class="aa-sort-form">
+                    <label for="">Sort by</label>
+                    <select name="">
+                      <option value="1" selected="Default">Relevance</option>
+                      <option value="2">Discount</option>
+                      <option value="3">Price</option>
+                      <option value="4">Popularity</option>
+                      <option value="6">New In</option>
+                    </select>
+                  </form>
+                  <form action="" class="aa-show-form">
+                    <label for="">Show</label>
+                    <select name="">
+                      <option value="1" selected="12">12</option>
+                      <option value="2">24</option>
+                      <option value="3">36</option>
+                    </select>
+                  </form>
+                </div>
+                <div class="aa-product-catg-head-right">
+                  <a id="grid-catg" href="#"><span class="fa fa-th"></span></a>
+                  <a id="list-catg" href="#"><span class="fa fa-list"></span></a>
+                </div>
+              </div> -->
+              <div
+                class="aa-product-catg-body"
+                *ngIf="pageDetail.productList.length > 0; else notFound"
+              >
+                <ul
+                  class="aa-product-catg"
+                  *ngIf="
+                    pageDetail.productList !== null &&
+                    pageDetail.productList !== undefined &&
+                    pageDetail.productList.length > 0
+                  "
+                >
+                  <!-- start single product item -->
+                  <li *ngFor="let product of pageDetail.productList">
+                    <figure>
+                      <a
+                        class="aa-product-img"
+                        routerLink="/product/{{ product.page.pageLink }}"
+                        ><img
+                          [src]="product.storageDataList[0].smallFileUrl"
+                          [alt]="product.storageDataList[0].name"
+                      /></a>
+                      <a class="aa-add-card-btn pointer" (click)="addToCard(product,'cart')"
+
+                        ><span class="fa fa-shopping-cart"></span>Add To Cart</a
+                      >
+                      <figcaption>
+                        <h4 class="aa-product-title">
+                          <a
+                            routerLink="/product/{{ product.page.pageLink }}"
+                            >{{ product.name }}</a
+                          >
+                        </h4>
+                        <span class="aa-product-price"
+                          >₹{{ product.productStock.discountedRate }}</span
+                        ><span class="aa-product-price"
+                          ><del
+                            >₹{{ product.productStock.productRate }}</del
+                          ></span
+                        >
+                      </figcaption>
+                    </figure>
+                    <div
+                      (mouseover)="setProductDetail(product)"
+                      class="aa-product-hvr-content"
+                    >
+                      <a
+                        data-toggle="tooltip"
+                        data-placement="top"
+                        title="Add to Wishlist"
+                        [id]="product.id * 12"
+                        class="pointer"
+                        (click)="addTowishlist(product.id * 12, product)"
+                        ><span class="fa fa-heart-o"></span
+                      ></a>
+
+                      <!-- <a href="#" data-toggle="tooltip" data-placement="top" title="Compare"><span class="fa fa-exchange"></span></a> -->
+                      <a
+                        href="#"
+                        data-toggle2="tooltip"
+                        data-placement="top"
+                        title="Quick View"
+                        data-toggle="modal"
+                        data-target="#quick-view-modal"
+                        ><span class="fa fa-search"></span
+                      ></a>
+                    </div>
+                    <!-- product badge -->
+                    <span class="aa-badge aa-sale" href="#">{{
+                      product.specialLabel
+                    }}</span>
+                  </li>
+                </ul>
+                <!-- quick view modal -->
+                <div
+                  *ngIf="
+                    pageDetail.productList !== null &&
+                    pageDetail.productList !== undefined &&
+                    pageDetail.productList.length > 0
+                  "
+                  class="modal fade"
+                  id="quick-view-modal"
+                  tabindex="-1"
+                  role="dialog"
+                  aria-labelledby="myModalLabel"
+                  aria-hidden="true"
+                >
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-body">
+                        <button
+                          type="button"
+                          class="close"
+                          id="quick-view-modal-close"
+                          data-dismiss="modal"
+                          aria-hidden="true"
+                        >
+                          &times;
+                        </button>
+                        <div class="row">
+                          <!-- Modal view slider -->
+                          <div class="col-md-6 col-sm-6 col-xs-12">
+                            <div class="p-0 col-md-3 col-sm-3 col-xs-12">
+                              <div class="p-1">
+                                <a
+                                  *ngFor="let img of product.storageDataList"
+                                  (click)="product.storageData = img"
+                                  class="p-1 pointer"
+                                >
+                                  <img
+                                    [src]="img.thumbFileUrl"
+                                    [alt]="img.name"
+                                  />
+                                </a>
+                              </div>
+                            </div>
+                            <div class="col-md-9 p-0 col-sm-9 col-xs-12">
+                              <!-- <div class="aa-product-view-slider">
+                            <div class="simpleLens-gallery-container" id="demo-1">
+                              <div class="simpleLens-container"> -->
+                              <ng-img-magnifier
+                                thumbImage="{{
+                                  product.storageData.smallFileUrl
+                                }}"
+                                fullImage="{{ product.storageData.fileUrl }}"
+                                [top]="1"
+                                [right]="-125"
+                                [lensWidth]="70"
+                                [lensHeight]="100"
+                                [resultWidth]="120"
+                                [resultHeight]="100"
+                                [imgWidth]="275"
+                                [imgHeight]="400"
+                              >
+                              </ng-img-magnifier>
+                            </div>
+                            <!-- <div class="simpleLens-big-image-container">
+                                  <a class="simpleLens-lens-image"
+                                    data-lens-image="{{product.storageDataList[0].fileUrl}}">
+                                    <img height="500" [src]="product.storageDataList[0].fileUrl"
+                                      [alt]="product.storageDataList[0].name" class="simpleLens-big-image">
+                                  </a>
+                                </div> -->
+                            <!-- </div>
+                              <div class="simpleLens-thumbnails-container">
+                                <a *ngFor="let img of product.storageDataList" href="#"
+                                  class="simpleLens-thumbnail-wrapper" data-lens-image="{{img.fileUrl}}"
+                                  data-big-image={{img.fileUrl}}>
+                                  <img height="100" [src]="img.fileUrl" [alt]="img.name">
+                                </a>
+                              </div>
+                            </div>
+                          </div> -->
+                          </div>
+                          <!-- Modal view content -->
+                          <div
+                            class="col-md-6 col-sm-6 col-xs-12"
+                            style="z-index: 3; position: relative"
+                          >
+                            <div
+                              class="aa-product-view-content"
+                              id="aa-product-view-content"
+                            >
+                              <h3>{{ product.name }}</h3>
+                              <div class="aa-price-block">
+                                <span class="aa-product-price"
+                                  >₹{{
+                                    product.productStock.discountedRate
+                                  }}</span
+                                >
+                                <span class="aa-product-price"
+                                  ><del class="ml-2"
+                                    >₹{{
+                                      product.productStock.productRate
+                                    }}</del
+                                  ></span
+                                >
+                                <p class="aa-product-avilability">
+                                  Avilability: <span>In stock</span>
+                                </p>
+                              </div>
+                              <div
+                                [innerHTML]="
+                                  product.shortDescription | safeHtml
+                                "
+                              ></div>
+
+                              <div
+                                class="row col-lg-12 col-md-12 col-sm-12 mr-1 ptb-2"
+                              >
+                                <span class="pull-left mt-1">Quantity: </span>
+                                <div class="ml-2 wrapper pull-left">
+                                  <button
+                                    class="plusminus"
+                                    (click)="handleMinus()"
+                                    [disabled]="value == 1"
+                                    [ngStyle]="
+                                      value == 1 ? { opacity: 0.2 } : {}
+                                    "
+                                  >
+                                    -
+                                  </button>
+                                  <input
+                                    type="number"
+                                    class="num"
+                                    value="0"
+                                    min="0"
+                                    max="100"
+                                    [(ngModel)]="value"
+                                  />
+                                  <button
+                                    class="plusminus"
+                                    (click)="handlePlus()"
+                                    [ngStyle]="
+                                      product.productStock
+                                        .maxOrderProductQty == value
+                                        ? { opacity: 0.2 }
+                                        : {}
+                                    "
+                                    [disabled]="
+                                      product.productStock
+                                        .maxOrderProductQty == value
+                                    "
+                                  >
+                                    +
+                                  </button>
+                                </div>
+                                <div class="clear-fix"></div>
+                              </div>
+                              <div
+                                class="row col-lg-12 col-md-12 col-sm-12 mr-1 ptb-2"
+                              >
+                                <span class="pull-left">Category: </span>
+                                <div class="ml-2 pull-left">
+                                  <ng-container
+                                    *ngFor="
+                                      let cat of product.productSubDataList
+                                    "
+                                  >
+                                    <ng-container
+                                      *ngIf="cat.dataFor === 'Category'"
+                                    >
+                                      <a href="#">{{ cat.stringVal }}</a>
+                                    </ng-container>
+                                  </ng-container>
+                                </div>
+                                <div class="clear-fix"></div>
+                              </div>
+
+                              <div class="aa-prod-view-bottom">
+                                <a
+                                  (click)="addToCard(product, 'cart')"
+                                  class="aa-add-to-cart-btn"
+                                  ><span class="fa fa-shopping-cart"></span>Add
+                                  To Cart</a
+                                >
+                                <a
+                                  (click)="navigateToDetail(product)"
+                                  class="aa-add-to-cart-btn"
+                                  >View Details</a
+                                >
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- /.modal-content -->
+                  </div>
+                  <!-- /.modal-dialog -->
+                </div>
+                <!-- / quick view modal -->
+              </div>
+              <ng-template #notFound>
+                <div class="w-100 h-100 d-flex">
+                  <span>Product Not Found</span>
+                </div>
+              </ng-template>
+
+              <!-- <div class="aa-product-catg-pagination">
+                <nav>
+                  <ul class="pagination">
+                    <li>
+                      <a href="#" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                      </a>
+                    </li>
+                    <li><a href="#">1</a></li>
+                    <li><a href="#">2</a></li>
+                    <li><a href="#">3</a></li>
+                    <li><a href="#">4</a></li>
+                    <li><a href="#">5</a></li>
+                    <li>
+                      <a href="#" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                      </a>
+                    </li>
+                  </ul>
+                </nav>
+              </div> -->
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-3 col-sm-4 col-md-pull-9">
+            <aside class="aa-sidebar">
+              <!-- single sidebar -->
+
+              <div class="aa-sidebar-widget" *ngFor="let cat of catList">
+                <h3>{{ cat.name }}</h3>
+                <ul class="aa-catg-nav">
+                  <li *ngFor="let colItem of getSubCat(cat.id)">
+                    <a
+                      (click)="
+                        colItem.isChecked = !colItem.isChecked;
+                        filterProject(colItem.product, colItem)
+                      "
+                      ><input type="checkbox" [checked]="colItem.isChecked" />
+                      {{ colItem.name }} ({{ colItem.count }})</a
+                    >
+                  </li>
+                </ul>
+              </div>
+              <div class="aa-sidebar-widget">
+                <h3>Collections</h3>
+                <ul class="aa-catg-nav">
+                  <li *ngFor="let colItem of collectionList">
+                    <a
+                      (click)="
+                        colItem.isChecked = !colItem.isChecked;
+                        filterProject(colItem.product, colItem)
+                      "
+                      ><input type="checkbox" [checked]="colItem.isChecked" />
+                      {{ colItem.name }} ({{ colItem.count }})</a
+                    >
+                  </li>
+                </ul>
+              </div>
+              <!-- single sidebar -->
+              <div class="aa-sidebar-widget">
+                <h3>Trending Now</h3>
+                <div class="tag-cloud">
+                  <ng-container *ngFor="let colItem of tagsList">
+                    <a
+                      (click)="
+                        colItem.isChecked = !colItem.isChecked;
+                        filterProject(colItem.product, colItem)
+                      "
+                      ><input type="checkbox" [checked]="colItem.isChecked" />
+                      {{ colItem.name }} ({{ colItem.count }})</a
+                    >
+                  </ng-container>
+                </div>
+              </div>
+              <!-- single sidebar -->
+              <div class="aa-sidebar-widget">
+                <h3>Discount</h3>
+                <!-- price range -->
+                <div>
+                  <ng5-slider
+                    [(value)]="minValueDiscount"
+                    [(highValue)]="maxValueDiscount"
+                    [options]="rangeDiscountOptions"
+                  ></ng5-slider>
+                  <!-- <span id="skip-value-lower" class="example-val">{{minValue}}</span>
+                  <span id="skip-value-upper" class="example-val">{{maxValue}}</span> -->
+                </div>
+              </div>
+              <div class="aa-sidebar-widget">
+                <h3>Price</h3>
+                <!-- price range -->
+                <div>
+                  <ng5-slider
+                    [(value)]="minPrice"
+                    [(highValue)]="maxPrice"
+                    [options]="rangePriceOptions"
+                    (userChange)="onRangeChange($event)"
+                  ></ng5-slider>
+
+                  <!-- <form action="">
+                    <div id="skipstep" class="noUi-target noUi-ltr noUi-horizontal noUi-background">
+                    </div>
+                    <span id="skip-value-lower" class="example-val">30.00</span>
+                    <span id="skip-value-upper" class="example-val">100.00</span>
+                    -->
+                </div>
+              </div>
+              <!-- single sidebar -->
+              <div class="aa-sidebar-widget">
+                <h3>Color</h3>
+                <div class="aa-color-tag">
+                  <ng-container *ngFor="let colItem of colorList">
+                    <a
+                      [style.background-color]="colItem.colorCode"
+                      (click)="colItem.isChecked = !colItem.isChecked"
+                    ></a>
+                  </ng-container>
+                  <!-- <a class="aa-color-green" href="#"></a>
+                  <a class="aa-color-yellow" href="#"></a>
+                  <a class="aa-color-pink" href="#"></a>
+                  <a class="aa-color-purple" href="#"></a>
+                  <a class="aa-color-blue" href="#"></a>
+                  <a class="aa-color-orange" href="#"></a>
+                  <a class="aa-color-gray" href="#"></a>
+                  <a class="aa-color-black" href="#"></a>
+                  <a class="aa-color-white" href="#"></a>
+                  <a class="aa-color-cyan" href="#"></a>
+                  <a class="aa-color-olive" href="#"></a>
+                  <a class="aa-color-orchid" href="#"></a> -->
+                </div>
+              </div>
+              <!-- single sidebar -->
+              <!-- <div class="aa-sidebar-widget">
+                <h3>Recently Views</h3>
+                <div class="aa-recently-views">
+                  <ul>
+                    <li>
+                      <a href="#" class="aa-cartbox-img"><img alt="img" src="img/woman-small-2.jpg"></a>
+                      <div class="aa-cartbox-info">
+                        <h4><a href="#">Product Name</a></h4>
+                        <p>1 x ₹250</p>
+                      </div>
+                    </li>
+                    <li>
+                      <a href="#" class="aa-cartbox-img"><img alt="img" src="img/woman-small-1.jpg"></a>
+                      <div class="aa-cartbox-info">
+                        <h4><a href="#">Product Name</a></h4>
+                        <p>1 x ₹250</p>
+                      </div>
+                    </li>
+                    <li>
+                      <a href="#" class="aa-cartbox-img"><img alt="img" src="img/woman-small-2.jpg"></a>
+                      <div class="aa-cartbox-info">
+                        <h4><a href="#">Product Name</a></h4>
+                        <p>1 x ₹250</p>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </div> -->
+              <!-- single sidebar -->
+              <!-- <div class="aa-sidebar-widget">
+                <h3>Top Rated Products</h3>
+                <div class="aa-recently-views">
+                  <ul>
+                    <li>
+                      <a href="#" class="aa-cartbox-img"><img alt="img" src="img/woman-small-2.jpg"></a>
+                      <div class="aa-cartbox-info">
+                        <h4><a href="#">Product Name</a></h4>
+                        <p>1 x ₹250</p>
+                      </div>
+                    </li>
+                    <li>
+                      <a href="#" class="aa-cartbox-img"><img alt="img" src="img/woman-small-1.jpg"></a>
+                      <div class="aa-cartbox-info">
+                        <h4><a href="#">Product Name</a></h4>
+                        <p>1 x ₹250</p>
+                      </div>
+                    </li>
+                    <li>
+                      <a href="#" class="aa-cartbox-img"><img alt="img" src="img/woman-small-2.jpg"></a>
+                      <div class="aa-cartbox-info">
+                        <h4><a href="#">Product Name</a></h4>
+                        <p>1 x ₹250</p>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </div> -->
+            </aside>
+          </div>
+        </div>
+      </div>
+    </section>
+  </ng-container>
+  <ng-container *ngIf="pageDetail.pageType === 'Contact Us'">
+    <div class="container p-2">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="aa-contact-area">
+            <div class="aa-contact-top">
+              <h2>We are wating to assist you..</h2>
+              <div [innerHTML]="pageDetail.shortDescription | safeHtml"></div>
+            </div>
+            <!-- contact map -->
+            <div style="display: none" class="aa-contact-map">
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3902.3714257064535!2d-86.7550931378034!3d34.66757706940219!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8862656f8475892d%3A0xf3b1aee5313c9d4d!2sHuntsville%2C+AL+35813%2C+USA!5e0!3m2!1sen!2sbd!4v1445253385137"
+                width="100%"
+                height="450"
+                frameborder="0"
+                style="border: 0"
+                allowfullscreen
+              ></iframe>
+            </div>
+            <!-- Contact address -->
+            <div class="aa-contact-address">
+              <div class="row">
+                <div class="col-md-8">
+                  <div class="aa-contact-address-left">
+                    <form
+                      class="comments-form contact-form"
+                      action=""
+                      #contactForm="ngForm"
+                    >
+                      <div class="row">
+                        <div class="col-md-6">
+                          <div class="form-group">
+                            <input
+                              type="text"
+                              name="userName"
+                              #name="ngModel"
+                              [(ngModel)]="contact.name"
+                              placeholder="Your Name"
+                              class="form-control"
+                              required
+                              (keypress)="keyValidation($event, 'string')"
+                            />
+                          </div>
+                        </div>
+                        <div class="col-md-6">
+                          <div class="form-group">
+                            <input
+                              type="email"
+                              placeholder="Email"
+                              name="userMail"
+                              #email="ngModel"
+                              [(ngModel)]="contact.email"
+                              class="form-control"
+                              required
+                              pattern="^((?!\.)[a-zA-Z0-9._%+-]+@(?!-)[A-Za-z0-9-]+(\.[A-Za-z]{2,})+)$"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-6">
+                          <div class="form-group">
+                            <input
+                              type="text"
+                              placeholder="Subject"
+                              name="formSubject"
+                              #subject="ngModel"
+                              [(ngModel)]="contact.subject"
+                              class="form-control"
+                              required
+                            />
+                          </div>
+                        </div>
+                        <div class="col-md-6">
+                          <div class="form-group">
+                            <input
+                              type="text"
+                              placeholder="Company"
+                              name="formCompanyName"
+                              #company="ngModel"
+                              [(ngModel)]="contact.company"
+                              class="form-control"
+                              required
+                            />
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="form-group">
+                        <textarea
+                          class="form-control"
+                          rows="3"
+                          placeholder="Message"
+                          name="formtextArea"
+                          #message="ngModel"
+                          [(ngModel)]="contact.message"
+                          required
+                        ></textarea>
+                      </div>
+                      <button
+                        class="aa-secondary-btn"
+                        (click)="submit(contactForm)"
+                      >
+                        Send
+                      </button>
+                    </form>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="aa-contact-address-right">
+                    <div [innerHTML]="pageDetail.description | safeHtml"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</ng-container>

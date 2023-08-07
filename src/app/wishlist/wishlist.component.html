@@ -1,0 +1,222 @@
+<ng-container *ngIf="pageLoaded | async">
+
+
+  <div class="aa-product-inner">
+    <!-- start prduct navigation -->
+    <!-- <nav class="" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="#">Home</a></li>
+          <li class="breadcrumb-item active" aria-current="page">Library</li>
+        </ol>
+      </nav> -->
+    <ul class="nav nav-tabs aa-products-tab p-0">
+      <li><a href="#" routerLink="/home" data-toggle="tab"><i class="fa fa-home"></i></a></li>
+      <li class="active"><a href="#" data-toggle="tab">{{pageDetail.name}}</a></li>
+    </ul>
+
+  </div>
+
+
+    <section id="aa-product-category">
+      <div class="container">
+        <div class="row">
+          <!-- col-md-push-3 -->
+          <div class="col-lg-12 col-md-12 col-sm-12">
+            <div class="aa-product-catg-content">
+              <!-- <div class="aa-product-catg-head">
+                <div class="aa-product-catg-head-left">
+                  <form action="" class="aa-sort-form">
+                    <label for="">Sort by</label>
+                    <select name="">
+                      <option value="1" selected="Default">Relevance</option>
+                      <option value="2">Discount</option>
+                      <option value="3">Price</option>
+                      <option value="4">Popularity</option>
+                      <option value="6">New In</option>
+                    </select>
+                  </form>
+                  <form action="" class="aa-show-form">
+                    <label for="">Show</label>
+                    <select name="">
+                      <option value="1" selected="12">12</option>
+                      <option value="2">24</option>
+                      <option value="3">36</option>
+                    </select>
+                  </form>
+                </div>
+                <div class="aa-product-catg-head-right">
+                  <a id="grid-catg" href="#"><span class="fa fa-th"></span></a>
+                  <a id="list-catg" href="#"><span class="fa fa-list"></span></a>
+                </div>
+              </div> -->
+
+              <div class="aa-product-catg-body">
+                <ul class="aa-product-catg" *ngIf="pageDetail?.productList !== null
+              && pageDetail?.productList !== undefined && pageDetail?.productList?.length > 0">
+                  <!-- start single product item -->
+                  <li *ngFor="let product of newData">
+                    <figure  >
+
+                      <a class="aa-product-img" routerLink="/product/{{product?.productDetail?.page?.pageLink}}"><img
+                          [src]="product?.productDetail?.storageDataList[0]?.smallFileUrl" [alt]="product?.productDetail?.storageDataList[0]?.name"></a>
+                      <a class="aa-add-card-btn" (click)="addToCard(product,'cart')"><span class="fa fa-shopping-cart" ></span>Add To Cart</a>
+                      <figcaption>
+                        <h4 class="aa-product-title"><a
+                            routerLink="/product/{{product.page?.pageLink}}">{{product?.productDetail?.name}}</a></h4>
+                        <span class="aa-product-price">₹{{product?.productDetail?.productStock?.discountedRate}}</span><span
+                          class="aa-product-price"><del>₹{{product?.productDetail?.productStock?.productRate}}</del></span>
+
+                      </figcaption>
+                    </figure>
+                    <div (mouseover)="setProductDetail(product)" class="aa-product-hvr-content">
+                      <a (click)="removeOrder(product)" title="Remove from Wishlist"><span
+                          class="fa fa-close"></span></a>
+                      <!-- <a href="#" data-toggle="tooltip" data-placement="top" title="Compare"><span class="fa fa-exchange"></span></a> -->
+                      <a href="#" data-toggle2="tooltip" data-placement="top" title="Quick View" data-toggle="modal"
+                        data-target="#quick-view-modal"><span class="fa fa-search"></span></a>
+                    </div>
+                    <!-- product badge -->
+                    <span class="aa-badge aa-sale" href="#">{{product?.productDetail?.specialLabel}}</span>
+                  </li>
+
+                </ul>
+                <!-- quick view modal -->
+                <div *ngIf="pageDetail.productList !== null
+                && pageDetail.productList !== undefined && pageDetail.productList?.length > 0" class="modal fade"
+                  id="quick-view-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-body">
+                        <button type="button" class="close" id="quick-view-modal-close" data-dismiss="modal"
+                          aria-hidden="true">&times;</button>
+                        <div class="row">
+                          <!-- Modal view slider -->
+                          <div class="col-md-6 col-sm-6 col-xs-12">
+                            <div class="p-0 col-md-3 col-sm-3 col-xs-12">
+                              <div class="p-1">
+                                <a *ngFor="let img of product?.productDetail?.storageDataList" (click)="product.storageData = img"
+                                  class="p-1 pointer">
+                                  <img [src]="img.thumbFileUrl" [alt]="img.name">
+                                </a>
+
+                              </div>
+                            </div>
+                            <div class="col-md-9 p-0 col-sm-9 col-xs-12">
+                              <!-- <div class="aa-product-view-slider">
+                            <div class="simpleLens-gallery-container" id="demo-1">
+                              <div class="simpleLens-container"> -->
+                              <ng-img-magnifier thumbImage="{{img?.fileUrl}}"
+                                fullImage="{{img?.fileUrl}}" [top]="1" [right]="-125" [lensWidth]="70"
+                                [lensHeight]="100" [resultWidth]="120" [resultHeight]="100" [imgWidth]="275"
+                                [imgHeight]="400">
+                              </ng-img-magnifier>
+                            </div>
+                            <!-- <div class="simpleLens-big-image-container">
+                                  <a class="simpleLens-lens-image"
+                                    data-lens-image="{{product.storageDataList[0].fileUrl}}">
+                                    <img height="500" [src]="product.storageDataList[0].fileUrl"
+                                      [alt]="product.storageDataList[0].name" class="simpleLens-big-image">
+                                  </a>
+                                </div> -->
+                            <!-- </div>
+                              <div class="simpleLens-thumbnails-container">
+                                <a *ngFor="let img of product.storageDataList" href="#"
+                                  class="simpleLens-thumbnail-wrapper" data-lens-image="{{img.fileUrl}}"
+                                  data-big-image={{img.fileUrl}}>
+                                  <img height="100" [src]="img.fileUrl" [alt]="img.name">
+                                </a>
+                              </div>
+                            </div>
+                          </div> -->
+                          </div>
+                          <!-- Modal view content -->
+                          <div class="col-md-6 col-sm-6 col-xs-12" style="z-index: 3; position: relative;">
+                            <div class="aa-product-view-content" id="aa-product-view-content">
+                              <h3>{{product?.productDetail?.name}}</h3>
+                              <div class="aa-price-block">
+                                <span class="aa-product-price">₹{{product?.productDetail?.productStock?.discountedRate}}</span>
+                                <span class="aa-product-price"><del
+                                    class="ml-2">₹{{product?.productDetail?.productStock?.productRate}}</del></span>
+                                <p class="aa-product-avilability">Avilability: <span>In stock</span></p>
+                              </div>
+                              <div [innerHTML]="product.shortDescription | safeHtml"></div>
+
+                              <div class="row col-lg-12 col-md-12 col-sm-12 mr-1 ptb-2">
+                                <span class="pull-left mt-1">Quantity: </span>
+                                <div class="ml-2 wrapper pull-left">
+                                  <button class="plusminus" (click)="handleMinus()">-</button>
+                                  <input type="number" class="num" value="0" min="0" max="100" [(ngModel)]="productQty" />
+                                  <button class="plusminus" (click)="handlePlus()">+</button>
+                                </div>
+                                <div class="clear-fix"></div>
+                              </div>
+                              <div class="row col-lg-12 col-md-12 col-sm-12 mr-1 ptb-2">
+                                <span class="pull-left">Category: </span>
+                                <div class="ml-2 pull-left">
+                                  <ng-container *ngFor="let cat of product?.productDetail?.productSubDataList">
+                                    <ng-container *ngIf="cat.dataFor === 'Category'">
+                                      <a href="#">{{cat.stringVal}}</a>
+                                    </ng-container>
+
+                                  </ng-container>
+                                </div>
+                                <div class="clear-fix"></div>
+                              </div>
+
+                              <div class="aa-prod-view-bottom">
+                                <a (click)="addToCard(product,'cart')" class="aa-add-to-cart-btn"><span class="fa fa-shopping-cart"></span>Add To
+                                  Cart</a>
+                                <a (click)="navigateToDetail(product)" class="aa-add-to-cart-btn">View
+                                  Details</a>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div><!-- /.modal-content -->
+                  </div><!-- /.modal-dialog -->
+                </div>
+                <!-- / quick view modal -->
+              </div>
+              <!-- <div class="aa-product-catg-pagination">
+                <nav>
+                  <ul class="pagination">
+                    <li>
+                      <a href="#" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                      </a>
+                    </li>
+                    <li><a href="#">1</a></li>
+                    <li><a href="#">2</a></li>
+                    <li><a href="#">3</a></li>
+                    <li><a href="#">4</a></li>
+                    <li><a href="#">5</a></li>
+                    <li>
+                      <a href="#" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                      </a>
+                    </li>
+                  </ul>
+                </nav>
+              </div> -->
+            </div>
+          </div>
+
+
+        </div>
+      </div>
+    </section>
+  </ng-container>
+  <div bsModal #msgModel="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+  aria-hidden="true" [config]="{backdrop: 'static'}">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body">
+        <button type="button" class="close" (click)="msgModel.hide()">&times;</button>
+        <div class="row p-20">
+          <h4>{{promptMessage}}</h4>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

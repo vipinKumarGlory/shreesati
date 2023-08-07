@@ -1,0 +1,215 @@
+/* You can add global styles to this file, and also import other style files */
+*{
+  margin: 0px;
+  padding: 0px;
+  box-sizing: border-box;
+}
+
+.display-flex{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.fullHeight_VH{
+  height: 100vh;
+}
+.m-2{
+  margin: 2rem 0px;
+}
+.m-1{
+  margin: 1rem 0px;
+}
+.m-3{
+  margin: 3rem 0px ;
+}
+
+.p-2{
+  padding: 2rem 0px;
+}
+.p-1{
+  padding: 1rem 0px;
+}
+.p-3{
+  padding: 3rem 0px ;
+}
+.d-flex{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.display_flex{
+  display: flex;
+}
+
+
+.fullWidth_VW{
+  width: 100vw;
+}
+.fs-11{
+  font-size: 11px;
+}
+.fs-12 {
+  font-size: 12px;
+}
+.fs-13{
+  font-size: 13px;
+}
+.fs-14 {
+  font-size: 14px;
+}
+.fs-16 {
+  font-size: 16px;
+}
+.fs-18 {
+  font-size: 18px;
+}
+.fs-20 {
+  font-size: 20px;
+}
+.fs-22 {
+  font-size: 22px;
+}
+.fs-24 {
+  font-size: 24px;
+}
+.fs-26 {
+  font-size: 26px;
+}
+.fs-28 {
+  font-size: 28px;
+}
+.fs-30 {
+  font-size: 30px;
+}
+.fs-32 {
+  font-size: 32px;
+}
+.fs-34 {
+  font-size: 34px;
+}
+.fw-100 {
+  font-weight: 100;
+}
+.fw-200 {
+  font-weight: 200;
+}
+.fw-300 {
+  font-weight: 300;
+}
+.fw-400 {
+  font-weight: 400;
+}
+.fw-500 {
+  font-weight: 500;
+}
+.fw-600 {
+  font-weight: 600;
+}
+.fw-700 {
+  font-weight: 700;
+}
+.fw-800 {
+  font-weight: 800;
+}
+.fw-900 {
+  font-weight: 900;
+}
+.fw-normal {
+  font-weight: normal;
+}
+
+.d-grid {
+  display: grid;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.h-0 {
+  height: 0%;
+}
+.r-0{
+  right: 0px;
+}
+.l-0{
+  left: 0px;
+}
+.b-0{
+  bottom: 0px;
+}
+.t-0{
+  top: 0px;
+}
+
+.cardButton{
+      width: 100%;
+    background: #0157A4;
+    border: none;
+    border-radius: 6px;
+    padding: 7px;
+    color: white;
+    font-size: 14px;
+}
+
+
+.p_1{
+  padding: 1rem;
+}
+.p_2{
+  padding: 2rem;
+}
+.p_3{
+  padding: 3rem;
+}
+.boder-none{
+  border: none;
+}
+input:focus{
+  outline: none;
+}
+
+.box-shadow {
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+.note {
+  color: #616161;
+  font-size: 12px;
+}
+.logoDiv {
+  width: 5rem;
+  height: 5rem;
+}
+
+ .tooltip .tooltip-inner{
+  background-color: #ffafcc !important;
+}
+
+.width-100{
+  width: 100%;
+}
+.height-100{
+  height: 100%;
+}
+
+.justify-content-center{
+  justify-content: center;
+
+}
+
+.align-items-center{
+  align-items: center;
+}
+.box{
+  background-color: white;
+  height: 100%;
+  width: 100%;
+
+}
+
+.d-block{
+  display:block
+}
+.justify-content-between{
+  justify-content: space-between
+}

@@ -1,0 +1,556 @@
+<ng-container *ngIf="pageLoaded | async">
+  <div class="aa-product-inner">
+    <ul class="nav nav-tabs aa-products-tab p-0">
+      <li>
+        <a href="#" routerLink="/home" data-toggle="tab"
+          ><i class="fa fa-home"></i
+        ></a>
+      </li>
+      <li class="active"><a href="#" data-toggle="tab">CheckOut</a></li>
+    </ul>
+  </div>
+
+  <div class="checkOut-container">
+    <div class="row">
+      <div class="col-md-9">
+        <div style="margin-bottom: 2rem">
+          <div class="main-shadow">
+            <div class="row">
+              <div class="col-md-9">
+                <div style="display: flex">
+                  <div class="number">
+                    <div>1</div>
+                  </div>
+                  <div class="setDisplay">
+                    <div class="display_flex align-items-center">
+                      <div class="heading" style="margin-right: 1rem">
+                        LOGIN
+                      </div>
+                      <i
+                        *ngIf="userInfoFlag || !openCondiation.userLognOpen"
+                        class="fa fa-solid fa-check"
+                        style="color: #2a74f0"
+                      ></i>
+                    </div>
+                    <div
+                      style="display: flex"
+                      *ngIf="userInfoFlag || !openCondiation.userLognOpen"
+                    >
+                      <div class="userName">{{ userInfo.name }}</div>
+                      <span>{{ userInfo.email }}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div *ngIf="userInfoFlag">
+                  <button class="changeButton" (click)="change('login')">
+                    {{openCondiation.userAddressOpen || openCondiation.orderSummaryopen ? 'Change' :'Continue'}}
+                  </button>
+                </div>
+              </div>
+              <div
+                class="col-md-12"
+                [ngStyle]="
+                  openCondiation.userLognOpen
+                    ? { display: 'block' }
+                    : { display: 'none' }
+                "
+              >
+                <div class="row" style="padding: 2rem">
+                  <div class="col-md-6">
+                    <div class="info-div">
+                      <span class="heading_color">Name</span>
+                      <span style="margin-left: 3rem">{{ userInfo.name}}</span>
+                    </div>
+                    <div class="info-div">
+                      <span class="heading_color">Email</span>
+                      <span style="margin-left: 3rem">{{ userInfo.email}}</span>
+                    </div>
+                    <div class="info-div">
+                      <a
+                        ><span class="info_color pointer" (click)="logout()"
+                          >Logout & Sign in to another account</span
+                        ></a
+                      >
+                    </div>
+                    <div>
+                      <button
+                        class="deliveryButton"
+                        (click)="countinueFlow('login')"
+                      >
+                        Countinue Checkout
+                      </button>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="info-div">
+                      <span class="heading_color"
+                        >Advantages of our secure login</span
+                      >
+                    </div>
+                    <div>
+                      <i
+                        class="fa fa-solid fa-truck margin_right info_color"
+                      ></i>
+                      <span>Easily Track Order</span>
+                    </div>
+                    <div>
+                      <i
+                        class="fa fa-solid fa-bell margin_right info_color"
+                      ></i>
+                      <span>Get Relevant Alert and Recommmendation</span>
+                    </div>
+                    <div>
+                      <i
+                        class="fa fa-solid fa-star margin_right info_color"
+                      ></i>
+                      <span>Wishlist,Reviews, Ratings and More.</span>
+                    </div>
+                  </div>
+                  <div class="col-md-12 info-div">
+                    <div
+                      class="heading_color"
+                      style="text-align: center; margin-top: 1rem"
+                    >
+                      Please note that upon click "Logout" you will loss all
+                      items in the cart
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style="margin-bottom: 2rem">
+          <div class="main-shadow">
+            <div class="row">
+              <div class="col-md-9">
+                <div class="display_flex">
+                  <div class="number">
+                    <div>2</div>
+                  </div>
+                  <div class="setDisplay">
+                    <div class="display_flex align-items-center">
+                      <div class="heading" style="margin-right: 1rem">
+                        DELIVERY ADDRESS
+                      </div>
+                      <i
+                        *ngIf="userAddressFlag"
+                        class="fa fa-solid fa-check"
+                        style="color: #2a74f0"
+                      ></i>
+                    </div>
+                    <div *ngIf="userAddressFlag">
+                      <span>{{ userInfo.name }}</span>
+                      {{
+                        delivaryAddress.locality +
+                          " " +
+                          delivaryAddress.address +
+                          " " +
+                          delivaryAddress.city +
+                          "-" +
+                          delivaryAddress.pincode
+                      }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div *ngIf="userAddressFlag">
+                  <button class="changeButton" (click)="change('address')">
+                    Change
+                  </button>
+                </div>
+              </div>
+              <div
+                class="col-md-12"
+                [ngStyle]="
+                  openCondiation.userAddressOpen
+                    ? { display: 'block' }
+                    : { display: 'none' }
+                "
+              >
+                <div style="padding: 2rem">
+                  <form #addressFrom="ngForm">
+                    <div class="display_flex">
+                      <div class="coolinput">
+                        <label for="input" class="text">Name</label>
+                        <input
+                          type="text"
+                          placeholder="Write here..."
+                          name="name"
+                          class="input"
+                          #userName="ngModel"
+                          required
+                          [(ngModel)]="delivaryAddress.name"
+                        />
+                      </div>
+                      <div class="coolinput">
+                        <label for="input" class="text"
+                          >10-digit mobile number</label
+                        >
+                        <input
+                          type="text"
+                          placeholder="Write here..."
+                          name="mobile"
+                          #userNumber="ngModel"
+                          [(ngModel)]="delivaryAddress.number"
+                          class="input"
+                          pattern="^((\\+91-?)|0)?[6-9][0-9]{9}$"
+                          required
+                        />
+                      </div>
+                    </div>
+                    <div class="display_flex">
+                      <div class="coolinput">
+                        <label for="input" class="text">Pincode</label>
+                        <input
+                          type="text"
+                          placeholder="Write here..."
+                          name="pinCode"
+                          #userPincode="ngModel"
+                          [(ngModel)]="delivaryAddress.pincode"
+                          class="input"
+                          required
+                        />
+                      </div>
+                      <div class="coolinput">
+                        <label for="input" class="text">Locality</label>
+                        <input
+                          type="text"
+                          placeholder="Write here..."
+                          name="locality"
+                          #userLocality="ngModel"
+                          [(ngModel)]="delivaryAddress.locality"
+                          class="input"
+                          required
+                        />
+                      </div>
+                    </div>
+                    <div class="display_flex">
+                      <div class="coolinput">
+                        <label for="input" class="text"
+                          >Address(Area and street)</label
+                        >
+                        <!-- <input
+                          type="text"
+                          placeholder="Write here..."
+                          name="input"
+                          class="input"
+                        /> -->
+                        <textarea
+                          name="address"
+                          id=""
+                          class="input"
+                          #userAddress="ngModel"
+                          [(ngModel)]="delivaryAddress.address"
+                          placeholder="Write here..."
+                          required
+                        ></textarea>
+                      </div>
+                    </div>
+                    <div class="display_flex">
+                      <div class="coolinput">
+                        <label for="input" class="text"
+                          >City/District/Town</label
+                        >
+                        <input
+                          type="text"
+                          placeholder="Write here..."
+                          name="city"
+                          #userCity="ngModel"
+                          [(ngModel)]="delivaryAddress.city"
+                          class="input"
+                          required
+                        />
+                      </div>
+                      <div class="coolinput">
+                        <label for="input" class="text">State</label>
+                        <input
+                          type="text"
+                          placeholder="Write here..."
+                          name="state"
+                          #userState="ngModel"
+                          [(ngModel)]="delivaryAddress.state"
+                          class="input"
+                          required
+                        />
+                      </div>
+                    </div>
+                    <div class="display_flex">
+                      <div class="coolinput">
+                        <label for="input" class="text"
+                          >Landmark(optional)</label
+                        >
+                        <input
+                          type="text"
+                          placeholder="Write here..."
+                          name="landMark"
+                          #userLandmark="ngModel"
+                          [(ngModel)]="delivaryAddress.landMark"
+                          class="input"
+                        />
+                      </div>
+                      <div class="coolinput">
+                        <label for="input" class="text"
+                          >Alternate Phone(optional)</label
+                        >
+                        <input
+                          type="text"
+                          placeholder="Write here..."
+                          name="alternatePhone"
+                          #userAlternatePhone="ngModel"
+                          [(ngModel)]="delivaryAddress.alrnateNumber"
+                          class="input"
+                        />
+                      </div>
+                    </div>
+                    <div style="padding: 1rem">
+                      <div style="color: #b0b1b0">Address Type</div>
+                      <div class="display_flex">
+                        <div class="display_flex" style="margin-right: 3rem">
+                          <input
+                            type="radio"
+                            name="type"
+                            value="home"
+                            ngModel
+                            required
+                            [(ngModel)]="delivaryAddress.addressType"
+                            id="1"
+                            style="margin-right: 1rem; width: 1.5rem"
+                          />
+                          <div>Home (All day delivery)</div>
+                        </div>
+                        <div class="display_flex">
+                          <input
+                            type="radio"
+                            name="type"
+                            value="office"
+                            id="2"
+                            required
+                            ngModel
+                            [(ngModel)]="delivaryAddress.addressType"
+                            style="margin-right: 1rem; width: 1.5rem"
+                          />
+                          <div>Work (delivery between 10am - 5pm)</div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div style="padding: 1rem">
+                      <button
+                        class="deliveryButton"
+                        (click)="
+                          checkValidation(addressFrom) &&
+                            countinueFlow('address')
+                        "
+                      >
+                        SAVE AND DELIVER HERE
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style="margin-bottom: 2rem">
+          <div class="main-shadow">
+            <div class="row">
+              <div class="col-md-9">
+                <div class="display_flex">
+                  <div class="number">
+                    <div>3</div>
+                  </div>
+                  <div class="setDisplay">
+                    <div class="display_flex align-items-center">
+                      <div class="heading" style="margin-right: 1rem">
+                        ORDER SUMMARY
+                      </div>
+                      <i
+                        *ngIf="orderSummaryFlag"
+                        class="fa fa-solid fa-check"
+                        style="color: #2a74f0"
+                      ></i>
+                    </div>
+
+                    <div *ngIf="orderSummaryFlag">
+                      <span style="margin-right: 1rem;"> {{pageDetail.productList.length}}</span>
+                      <span>items</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div *ngIf="orderSummaryFlag">
+                  <button class="changeButton" (click)="change('order')">
+                    Change
+                  </button>
+                </div>
+              </div>
+              <div
+                class="col-md-12"
+                style="padding: 2rem"
+                [ngStyle]="
+                  openCondiation.orderSummaryopen
+                    ? { display: 'block' }
+                    : { display: 'none' }
+                "
+              >
+                <div *ngFor="let product of pageDetail.productList">
+                  <div style="margin-bottom: 1rem">
+                    <div class="row">
+                      <div class="col-md-3">
+                        <div style="width: 12rem">
+                          <img
+                            [src]="
+                              product.productDetail.storageDataList[0].fileUrl
+                            "
+                            alt=""
+                            class="width-100"
+                          />
+                        </div>
+                      </div>
+                      <div class="col-md-5">
+                        <div
+                          [innerHTML]="product.productDetail.shortDescription"
+                        ></div>
+                        <div
+                          [innerHTML]="product.productDetail.specifications"
+                        ></div>
+                        <div class="display_flex">
+                          <div class="rate">
+                            &#x20B9;
+                            <span>{{
+                              product.productDetail.productStock.productRate
+                            }}</span>
+                          </div>
+                          <div class="disconntRate">
+                            &#x20B9;
+                            <span>{{
+                              product.productDetail.productStock.discountedRate
+                            }}</span>
+                          </div>
+                          <div>
+                            <span
+                              >{{
+                                product.productDetail.productStock.discountedPer
+                              }}
+                              % off</span
+                            >
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-4">
+                        <div>Delivery in 2 days</div>
+                        <span> Open box delivery </span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="display_flex">
+                    <div class="display_flex">
+                      <button
+                        class="countButton"
+                        [disabled]="product.orderQty == 1"
+                        [ngStyle]="
+                          product.orderQty == 1 ? { opacity: 0.2 } : {}
+                        "
+                        (click)="product.orderQty = product.orderQty - 1"
+                      >
+                        -
+                      </button>
+                      <input
+                        type="number"
+                        value="0"
+                        class="countINput"
+                        [(ngModel)]="product.orderQty"
+                        readonly
+                      />
+                      <button
+                        class="countButton"
+                        style="margin-left: 1rem"
+                        [ngStyle]="
+                          product.productDetail.productStock
+                            .maxOrderProductQty == product.orderQty
+                            ? { opacity: 0.2 }
+                            : {}
+                        "
+                        [disabled]="
+                          product.productDetail.productStock
+                            .maxOrderProductQty == product.orderQty
+                        "
+                        (click)="product.orderQty = product.orderQty + 1"
+                      >
+                        +
+                      </button>
+                    </div>
+                    <div class="pointer remove" (click)="removeOrder(product.id)">REMOVE</div>
+                  </div>
+                </div>
+                <div style="padding: 2rem 0rem; text-align: end">
+                  <button
+                    class="deliveryButton"
+                    (click)="countinueFlow('order')"
+                  >
+                    CONTINUE
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="main-shadow">
+            <div class="row">
+              <div class="col-md-9">
+                <div class="display_flex">
+                  <div class="number">
+                    <div>4</div>
+                  </div>
+                  <div class="setDisplay">
+                    <div class="display_flex align-items-center">
+                      <div class="heading" style="margin-right: 1rem">
+                        PAYMENT
+                      </div>
+                    </div>
+                    <div></div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div
+                  *ngIf="userInfoFlag && userAddressFlag && orderSummaryFlag"
+                >
+                  <button class="changeButton" (click)="payNow()">
+                    PayNow
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="main-shadow">
+          <div class="display_flex" style="justify-content: space-between">
+            <span>Subtotal</span>
+            <span>120000</span>
+          </div>
+          <div class="display_flex" style="justify-content: space-between">
+            <span>Shipping</span>
+            <span>120000</span>
+          </div>
+          <div class="display_flex" style="justify-content: space-between">
+            <span>Discount</span>
+            <span>120000</span>
+          </div>
+          <div class="display_flex" style="justify-content: space-between">
+            <span>Total</span>
+            <span>120000</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>

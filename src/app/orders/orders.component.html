@@ -1,0 +1,162 @@
+<div class="row" *ngIf="!showStatusFlag">
+  <div class="col-sm-3  filterHeight">
+    <div class="m-2">Filters</div>
+    <div class="col-sm-12 m-2">
+      <p>ORDER STATUS</p>
+      <div style="margin-left: 5px">
+        <div class="form-check">
+          <input
+            style="margin-right: 3px"
+            class="form-check-input"
+            type="checkbox"
+            value=""
+            id="onTheWay"
+          />
+          <label class="form-check-label" for="onTheWay">
+            On The Way
+          </label>
+        </div>
+        <div class="form-check">
+          <input
+            style="margin-right: 3px"
+            class="form-check-input"
+            type="checkbox"
+            value=""
+            id="delivered"
+          />
+          <label class="form-check-label" for="delivered">
+            Delivered
+          </label>
+          <div class="form-check">
+            <input
+              style="margin-right: 3px"
+              class="form-check-input"
+              type="checkbox"
+              value=""
+              id="cancelled"
+            />
+            <label class="form-check-label" for="cancelled">
+              Cancelled
+            </label>
+          </div>
+          <div class="form-check">
+            <input
+              style="margin-right: 3px"
+              class="form-check-input"
+              type="checkbox"
+              value=""
+              id="returned"
+            />
+            <label class="form-check-label" for="returned">
+              Returned
+            </label>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-12">
+      <P>ORDER TIME</P>
+      <div style="margin-left: 5px">
+        <div class="form-check">
+          <input
+            style="margin-right: 3px"
+            class="form-check-input"
+            type="checkbox"
+            value=""
+            id="lastTheretyDays"
+          />
+          <label class="form-check-label" for="lastTheretyDays">
+            Last 30 Days
+          </label>
+        </div>
+        <div class="form-check">
+          <input
+            style="margin-right: 3px"
+            class="form-check-input"
+            type="checkbox"
+            value=""
+            id="2022"
+          />
+          <label class="form-check-label" for="2022">
+            2022
+          </label>
+        </div>
+        <div class="form-check">
+          <input
+            style="margin-right: 3px"
+            class="form-check-input"
+            type="checkbox"
+            value=""
+            id="2021"
+          />
+          <label class="form-check-label" for="2021">
+            2021
+          </label>
+        </div><div class="form-check">
+          <input
+            style="margin-right: 3px"
+            class="form-check-input"
+            type="checkbox"
+            value=""
+            id="2020"
+          />
+          <label class="form-check-label" for="2020">
+            2020
+          </label>
+        </div><div class="form-check">
+          <input
+            style="margin-right: 3px"
+            class="form-check-input"
+            type="checkbox"
+            value=""
+            id="older"
+          />
+          <label class="form-check-label" for="older">
+            Older
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-9  justify-content-center">
+    <div>
+      <div class="container">
+        <div class="row p_1  pointer " (click)="showSatus()"  >
+          <div class="col-sm-5 display_flex">
+            <div style="margin-right: 5rem;">
+              <div style="width: 12rem;">
+                <img src="assets/img/fashion/4.jpg" alt="" class="width-100" />
+              </div>
+            </div>
+            <div>
+              <p class="d-blok">description</p>
+              <span class="fs-12">small description</span>
+            </div>
+          </div>
+          <div class="col-sm-2">
+            <p>prize</p>
+          </div>
+          <div class="col-sm-5">
+            <div>
+              <div class="display_flex  align-items-center ">
+                <span style="color: darkorange; margin-right: 0.5rem;">
+                  <i class="fa fa-circle fs-11" aria-hidden="true" ></i>
+                </span>
+                <span>Delivered on may 07</span>
+              </div>
+              <div class="fs-12">Your item has been delivered</div>
+              <div class="display_flex fs-15 pointer"  >
+                <span style="color: blue; margin-right: 0.5rem;">
+                  <i class="fa fa-star" aria-hidden="true"></i>
+                </span>
+                <a href="" style="color: blue;">Rate and Review Product</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<app-status *ngIf="showStatusFlag" (backToOrderList)="showStatusFlag = false "></app-status>

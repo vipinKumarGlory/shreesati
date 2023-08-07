@@ -1,0 +1,668 @@
+<ng-container *ngFor="let widget of widgetList">
+  <section *ngIf="widget.widgetType === 'Home Slider'" id="aa-slider">
+    <div class="aa-slider-area">
+      <div class="container slider">
+        <div >
+          <ng-template ngFor [ngForOf]="widget?.storageDataList" let-slide let-i="index">
+            <img height="600" class="slide slide-animation nonDraggableImage" *ngIf="isCurrentSlideIndex(i)"
+              (swiperight)="nextSlide(widget?.storageDataList)" (swipeleft)="prevSlide(widget.storageDataList)"
+              [src]="slide.fileUrl" @carouselAnimation  >
+          </ng-template>
+        </div>
+
+        <button class="arrow prev" (click)="nextSlide(widget?.storageDataList)"></button>
+        <button class="arrow next" (click)="prevSlide(widget?.storageDataList)"></button>
+        <nav class="nav">
+          <div class="wrapper">
+            <ul class="dots">
+              <li class="dot" *ngFor="let slide of widget?.storageDataList; let i = index;">
+                <span [ngClass]="{'active':isCurrentSlideIndex(i)}"
+                  (click)="setCurrentSlideIndex(i);">{{slide?.name}}</span>
+              </li>
+            </ul>
+          </div>
+        </nav>
+      </div>
+    </div>
+  </section>
+  <!-- / Promo section -->
+  <!-- Products section -->
+  <section id="aa-product" *ngIf="widget?.widgetType === 'Tab View'">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="row">
+            <div class="aa-product-area">
+              <div class="aa-product-inner">
+                <!-- start prduct navigation -->
+                <ul class="nav nav-tabs aa-products-tab">
+                  <li class="active"><a href="#tab1Section" data-toggle="tab">{{widget?.tab1SectionName}}</a></li>
+
+                  <li><a href="#tab2Section" data-toggle="tab">{{widget?.tab2SectionName}}</a></li>
+                </ul>
+                <!-- <div class="aa-products-header">
+                  <h3>Shop by Style</h3>
+                </div> -->
+
+                <!-- Tab panes -->
+                <div class="tab-content">
+                  <!-- Start men product category -->
+                  <div class="tab-pane fade in active" id="tab1Section">
+                    <ul class="aa-product-catg"
+                      *ngIf="widget?.tab1SectionPageData !== null && widget?.tab1SectionPageData !== undefined">
+                      <!-- start single product item -->
+                      <li *ngFor="let product of widget?.tab1SectionPageData?.productList">
+                        <figure>
+                          <a class="aa-product-img" routerLink="/product/{{product.page.pageLink}}"><img
+                              [src]="product.storageDataList[0].smallFileUrl"
+                              [alt]="product.storageDataList[0].name"></a>
+                          <a href="#" data-toggle="modal" data-target="#login-modal" data-toggle2="tooltip"
+                            class="aa-add-card-btn" data-placement="top" *ngIf="!isLoggedIn"><span
+                              class="fa fa-shopping-cart"></span>Add To Cart</a>
+                          <a (click)="addPrdToCustomer('Cart',product.id)" *ngIf="isLoggedIn" class="aa-add-card-btn"
+                            href="#"><span class="fa fa-shopping-cart"></span>Add To Cart</a>
+                          <figcaption>
+                            <h4 class="aa-product-title"><a
+                                routerLink="/product/{{product.page.pageLink}}">{{product?.name}}</a></h4>
+                            <span class="aa-product-price">₹{{product?.productStock?.discountedRate}}</span><span
+                              class="aa-product-price"><del>₹{{product?.productStock?.productRate}}</del></span>
+
+                          </figcaption>
+                        </figure>
+
+                        <div (mouseover)="setProductDetail(product)" class="aa-product-hvr-content">
+                          <a href="#" data-toggle="modal" data-target="#login-modal" data-toggle2="tooltip"
+                            data-placement="top" *ngIf="!isLoggedIn" title="Add to Wishlist"><span
+                              class="fa fa-heart-o"></span></a>
+                          <a (click)="addPrdToCustomer('Wishlist',product.id)" *ngIf="isLoggedIn"
+                            title="Add to Wishlist"><span class="fa fa-heart-o"></span></a>
+                          <a href="#" data-toggle2="tooltip" data-placement="top" title="Quick View" data-toggle="modal"
+                            data-target="#quick-view-modal"><span class="fa fa-search"></span></a>
+                        </div>
+                        <!-- product badge -->
+                        <span class="aa-badge aa-sale" href="#">{{product?.specialLabel}}</span>
+                      </li>
+                    </ul>
+                    <a class="aa-browse-btn" routerLink="/page/{{widget.tab1SectionPageData.pageLink}}">VIEW ALL
+                      PRODUCTS</a>
+                  </div>
+                  <!-- / men product category -->
+                  <!-- start women product category -->
+                  <div class="tab-pane fade" id="tab2Section">
+                    <ul class="aa-product-catg"
+                      *ngIf="widget?.tab2SectionPageData !== null && widget?.tab2SectionPageData !== undefined">
+                      <!-- start single product item -->
+                      <li *ngFor="let product of widget?.tab2SectionPageData?.productList">
+                        <figure>
+                          <a class="aa-product-img" routerLink="/product/{{product.page.pageLink}}"><img
+                              [src]="product?.storageDataList[0]?.smallFileUrl"
+                              [alt]="product?.storageDataList[0]?.name"></a>
+                          <a href="#" data-toggle="modal" data-target="#login-modal" data-toggle2="tooltip"
+                            class="aa-add-card-btn" data-placement="top" *ngIf="!isLoggedIn"><span
+                              class="fa fa-shopping-cart"></span>Add To Cart</a>
+                          <a (click)="addPrdToCustomer('Cart',product.id)" *ngIf="isLoggedIn" class="aa-add-card-btn"
+                            href="#"><span class="fa fa-shopping-cart"></span>Add To Cart</a>
+
+
+
+                          <figcaption>
+                            <h4 class="aa-product-title"><a
+                                routerLink="/product/{{product.page.pageLink}}">{{product?.name}}</a></h4>
+                            <span class="aa-product-price">₹{{product?.productStock?.discountedRate}}</span><span
+                              class="aa-product-price"><del>₹{{product?.productStock?.productRate}}</del></span>
+
+                          </figcaption>
+                        </figure>
+                        <div (mouseover)="setProductDetail(product)" class="aa-product-hvr-content">
+                          <a href="#" data-toggle="modal" data-target="#login-modal" data-toggle2="tooltip"
+                            data-placement="top" *ngIf="!isLoggedIn" title="Add to Wishlist"><span
+                              class="fa fa-heart-o"></span></a>
+                          <a (click)="addPrdToCustomer('Wishlist',product.id)" *ngIf="isLoggedIn"
+                            title="Add to Wishlist"><span class="fa fa-heart-o"></span></a>
+                          <a href="#" data-toggle2="tooltip" data-placement="top" title="Quick View" data-toggle="modal"
+                            data-target="#quick-view-modal"><span class="fa fa-search"></span></a>
+
+                        </div>
+                        <!-- product badge -->
+                        <span class="aa-badge aa-sale" href="#">{{product?.specialLabel}}</span>
+                      </li>
+                    </ul>
+                    <a class="aa-browse-btn" routerLink="/page/{{widget.tab2SectionPageData.pageLink}}">VIEW ALL
+                      PRODUCTS</a>
+                  </div>
+                  <!-- / women product category -->
+
+                </div>
+                <!-- quick view modal -->
+                <div
+                  *ngIf="(widget.tab1SectionPageData?.productList !== null || widget.tab2SectionPageData?.productList !== null)
+               && (widget.tab1SectionPageData?.productList !== undefined || widget.tab2SectionPageData?.productList !== undefined) && (widget?.tab1SectionPageData?.productList?.length > 0 || widget.tab2SectionPageData?.productList?.length > 0)"
+                  class="modal fade" id="quick-view-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+                  aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-body">
+                        <button type="button" class="close" id="quick-view-modal-close" data-dismiss="modal"
+                          aria-hidden="true">&times;</button>
+                        <div class="row">
+                          <!-- Modal view slider -->
+                          <div class="col-md-6 col-sm-6 col-xs-12">
+                            <div class="p-0 col-md-3 col-sm-3 col-xs-12">
+                              <div class="p-1">
+                                <a *ngFor="let img of product.storageDataList" (click)="product.storageData = img"
+                                  class="p-1 pointer">
+                                  <img [src]="img.thumbFileUrl" [alt]="img.name">
+                                </a>
+
+                              </div>
+                            </div>
+                            <div class="col-md-9 p-0 col-sm-9 col-xs-12"
+                              *ngIf="product.storageData !== undefined && product.storageData !== null">
+                              <!-- <div class="aa-product-view-slider">
+                           <div class="simpleLens-gallery-container" id="demo-1">
+                             <div class="simpleLens-container"> -->
+                              <ng-img-magnifier thumbImage="{{product.storageData.smallFileUrl}}"
+                                fullImage="{{product.storageData.fileUrl}}" [top]="1" [right]="-125" [lensWidth]="70"
+                                [lensHeight]="100" [resultWidth]="120" [resultHeight]="100" [imgWidth]="275"
+                                [imgHeight]="400">
+                              </ng-img-magnifier>
+                            </div>
+                            <!-- <div class="simpleLens-big-image-container">
+                                 <a class="simpleLens-lens-image"
+                                   data-lens-image="{{product.storageDataList[0].fileUrl}}">
+                                   <img height="500" [src]="product.storageDataList[0].fileUrl"
+                                     [alt]="product.storageDataList[0].name" class="simpleLens-big-image">
+                                 </a>
+                               </div> -->
+                            <!-- </div>
+                             <div class="simpleLens-thumbnails-container">
+                               <a *ngFor="let img of product.storageDataList" href="#"
+                                 class="simpleLens-thumbnail-wrapper" data-lens-image="{{img.fileUrl}}"
+                                 data-big-image={{img.fileUrl}}>
+                                 <img height="100" [src]="img.fileUrl" [alt]="img.name">
+                               </a>
+                             </div>
+                           </div>
+                         </div> -->
+                          </div>
+                          <!-- Modal view content -->
+                          <div class="col-md-6 col-sm-6 col-xs-12" style="z-index: 3; position: relative;">
+                            <div class="aa-product-view-content" id="aa-product-view-content">
+                              <h3>{{product?.name}}</h3>
+                              <div class="aa-price-block">
+                                <span class="aa-product-price">₹{{product?.productStock?.discountedRate}}</span>
+                                <span class="aa-product-price"><del
+                                    class="ml-2">₹{{product?.productStock?.productRate}}</del></span>
+                                <p class="aa-product-avilability">Avilability: <span>In stock</span></p>
+                              </div>
+                              <div [innerHTML]="product.shortDescription | safeHtml"></div>
+
+                              <div class="row col-lg-12 col-md-12 col-sm-12 mr-1 ptb-2">
+                                <span class="pull-left mt-1">Quantity: </span>
+                                <div class="ml-2 wrapper pull-left">
+                                  <button class="plusminus" (click)="handleProductQtyMinus()">-</button>
+                                  <input type="number" class="num" value="0" min="0" max="100"
+                                    [(ngModel)]="productQty" />
+                                  <button class="plusminus" (click)="handleProductQtyPlus()">+</button>
+                                </div>
+                                <div class="clear-fix"></div>
+                              </div>
+                              <div class="row col-lg-12 col-md-12 col-sm-12 mr-1 ptb-2">
+                                <span class="pull-left">Category: </span>
+                                <div class="ml-2 pull-left">
+                                  <ng-container *ngFor="let cat of product.productSubDataList">
+                                    <ng-container *ngIf="cat.dataFor === 'Category'">
+                                      <a href="#">{{cat?.stringVal}}</a>
+                                    </ng-container>
+
+                                  </ng-container>
+                                </div>
+                                <div class="clear-fix"></div>
+                              </div>
+
+                              <div class="aa-prod-view-bottom">
+                                <a href="#" class="aa-add-to-cart-btn" *ngIf="!isLoggedIn"><span
+                                    class="fa fa-shopping-cart"></span>Add To
+                                  Cart</a>
+                                <a (click)="addPrdToCustomer('Cart',product.id)" *ngIf="isLoggedIn" class="aa-add-to-cart-btn"><span class="fa fa-shopping-cart"></span>Add To
+                                  Cart</a>
+
+                                <a (click)="navigateToDetail(product)" class="aa-add-to-cart-btn">View
+                                  Details</a>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div><!-- /.modal-content -->
+                  </div><!-- /.modal-dialog -->
+                </div>
+                <!-- / quick view modal -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section id="aa-promo" *ngIf="widget.widgetType === 'Category View'">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="aa-products-header">
+            <div class="aa-product-area">
+              <div class="aa-product-inner">
+                <!-- start prduct navigation -->
+                <ul class="nav nav-tabs aa-products-tab">
+                  <li class="active"><a data-toggle="tab">Shop by Craft</a></li>
+                </ul>
+
+              </div>
+              <div class="aa-promo-area no-padding">
+                <div class="row" *ngIf="widget?.catViewPageData?.categoryList?.length === 5">
+                  <!-- promo left -->
+                  <div class="col-md-5 no-padding">
+                    <div class="aa-promo-left">
+                      <div class="aa-promo-banner">
+                        <img [src]="widget.catViewPageData.categoryList[0].storageDataList[0].fileUrl" alt="img">
+                        <div class="aa-prom-content">
+                          <!-- <span>SHOPPING</span> -->
+                          <h4><a
+                              routerLink="/page/{{widget.catViewPageData.categoryList[0].pageOpDto.pageLink}}">{{widget?.catViewPageData?.categoryList[0]?.name}}</a>
+                          </h4>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- promo right -->
+                  <div class="col-md-7 no-padding">
+                    <div class="aa-promo-right">
+                      <div class="aa-single-promo-right">
+                        <div class="aa-promo-banner">
+                          <img [src]="widget.catViewPageData.categoryList[1].storageDataList[0].fileUrl" alt="img">
+                          <div class="aa-prom-content">
+                            <!-- <span>SHOPPING</span> -->
+                            <h4><a
+                                routerLink="/page/{{widget.catViewPageData.categoryList[1].pageOpDto.pageLink}}">{{widget?.catViewPageData?.categoryList[1]?.name}}</a>
+                            </h4>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="aa-single-promo-right">
+                        <div class="aa-promo-banner">
+                          <img [src]="widget.catViewPageData.categoryList[2].storageDataList[0].fileUrl" alt="img">
+                          <div class="aa-prom-content">
+                            <!-- <span>SHOPPING</span> -->
+                            <h4><a
+                                routerLink="/page/{{widget.catViewPageData.categoryList[2].pageOpDto.pageLink}}">{{widget?.catViewPageData?.categoryList[2]?.name}}</a>
+                            </h4>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="aa-single-promo-right">
+                        <div class="aa-promo-banner">
+                          <img [src]="widget.catViewPageData.categoryList[3].storageDataList[0].fileUrl" alt="img">
+                          <div class="aa-prom-content">
+                            <!-- <span>SHOPPING</span> -->
+                            <h4><a
+                                routerLink="/page/{{widget.catViewPageData.categoryList[3].pageOpDto.pageLink}}">{{widget?.catViewPageData?.categoryList[3]?.name}}</a>
+                            </h4>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="aa-single-promo-right">
+                        <div class="aa-promo-banner">
+                          <img [src]="widget.catViewPageData.categoryList[4].storageDataList[0].fileUrl" alt="img">
+                          <div class="aa-prom-content">
+                            <!-- <span>SHOPPING</span> -->
+                            <h4><a
+                                routerLink="/page/{{widget.catViewPageData.categoryList[4].pageOpDto.pageLink}}">{{widget?.catViewPageData?.categoryList[4]?.name}}</a>
+                            </h4>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row" *ngIf="widget?.catViewPageData?.categoryList?.length === 2
+                || widget?.catViewPageData?.categoryList?.length === 3">
+                  <!-- promo left -->
+                  <div class="col-md-6 no-padding">
+                    <div class="aa-promo-left">
+                      <div class="aa-promo-banner">
+                        <img [src]="widget.catViewPageData.categoryList[0].storageDataList[0].fileUrl" alt="img">
+                        <div class="aa-prom-content">
+                          <!-- <span>SHOPPING</span> -->
+                          <h4><a
+                              routerLink="/page/{{widget.catViewPageData.categoryList[0].pageOpDto.pageLink}}">{{widget?.catViewPageData?.categoryList[0]?.name}}</a>
+                          </h4>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6 no-padding">
+                    <div class="aa-promo-left">
+                      <div class="aa-promo-banner">
+                        <img [src]="widget.catViewPageData.categoryList[1].storageDataList[0].fileUrl" alt="img">
+                        <div class="aa-prom-content">
+                          <!-- <span>SHOPPING</span> -->
+                          <h4><a
+                              routerLink="/page/{{widget.catViewPageData.categoryList[1].pageOpDto.pageLink}}">{{widget?.catViewPageData?.categoryList[1]?.name}}</a>
+                          </h4>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- promo right -->
+
+                </div>
+
+                <!--  -->
+                <div class="row" *ngIf="widget?.catViewPageData?.categoryList?.length === 4">
+                  <!-- promo left -->
+
+                  <!-- promo right -->
+                  <div class="col-md-12 no-padding">
+                    <div class="aa-promo-right">
+                      <div class="aa-single-promo-right">
+                        <div class="aa-promo-banner">
+                          <img [src]="widget.catViewPageData.categoryList[0].storageDataList[0].fileUrl" alt="img">
+                          <div class="aa-prom-content">
+                            <!-- <span>SHOPPING</span> -->
+                            <h4><a
+                                routerLink="/page/{{widget.catViewPageData.categoryList[0].pageOpDto.pageLink}}">{{widget?.catViewPageData?.categoryList[0]?.name}}</a>
+                            </h4>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="aa-single-promo-right">
+                        <div class="aa-promo-banner">
+                          <img [src]="widget.catViewPageData.categoryList[1].storageDataList[0].fileUrl" alt="img">
+                          <div class="aa-prom-content">
+                            <!-- <span>SHOPPING</span> -->
+                            <h4><a
+                                routerLink="/page/{{widget.catViewPageData.categoryList[1].pageOpDto.pageLink}}">{{widget?.catViewPageData?.categoryList[1]?.name}}</a>
+                            </h4>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="aa-single-promo-right">
+                        <div class="aa-promo-banner">
+                          <img [src]="widget.catViewPageData.categoryList[2].storageDataList[0].fileUrl" alt="img">
+                          <div class="aa-prom-content">
+                            <!-- <span>SHOPPING</span> -->
+                            <h4><a
+                                routerLink="/page/{{widget.catViewPageData.categoryList[2].pageOpDto.pageLink}}">{{widget?.catViewPageData?.categoryList[2]?.name}}</a>
+                            </h4>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="aa-single-promo-right">
+                        <div class="aa-promo-banner">
+                          <img [src]="widget.catViewPageData.categoryList[3].storageDataList[0].fileUrl" alt="img">
+                          <div class="aa-prom-content">
+                            <!-- <span>SHOPPING</span> -->
+                            <h4><a
+                                routerLink="/page/{{widget.catViewPageData.categoryList[3].pageOpDto.pageLink}}">{{widget?.catViewPageData?.categoryList[3]?.name}}</a>
+                            </h4>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- -->
+                <div class="row" *ngIf="widget?.catViewPageData?.categoryList?.length === 6">
+                  <!-- promo left -->
+                  <div class="col-md-4 no-padding">
+                    <div class="aa-promo-left">
+                      <div class="aa-single-promo-left">
+                        <div class="aa-promo-banner">
+                          <img [src]="widget.catViewPageData.categoryList[0].storageDataList[0].fileUrl" alt="img">
+                          <div class="aa-prom-content">
+                            <!-- <span>SHOPPING</span> -->
+                            <h4><a
+                                routerLink="/page/{{widget.catViewPageData.categoryList[0].pageOpDto.pageLink}}">{{widget?.catViewPageData?.categoryList[0]?.name}}</a>
+                            </h4>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="aa-single-promo-left">?
+                        <div class="aa-promo-banner">
+                          <img [src]="widget.catViewPageData.categoryList[1].storageDataList[0].fileUrl" alt="img">
+                          <div class="aa-prom-content">
+                            <!-- <span>SHOPPING</span> -->
+                            <h4><a
+                                routerLink="/page/{{widget.catViewPageData.categoryList[1].pageOpDto.pageLink}}">{{widget?.catViewPageData?.categoryList[1]?.name}}</a>
+                            </h4>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-4 no-padding">
+                    <div class="aa-promo-left">
+                      <div class="aa-single-promo-left">
+                        <div class="aa-promo-banner">
+                          <img [src]="widget.catViewPageData.categoryList[2].storageDataList[0].fileUrl" alt="img">
+                          <div class="aa-prom-content">
+                            <!-- <span>SHOPPING</span> -->
+                            <h4><a
+                                routerLink="/page/{{widget.catViewPageData.categoryList[2].pageOpDto.pageLink}}">{{widget.catViewPageData.categoryList[2].name}}</a>
+                            </h4>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="aa-single-promo-left">
+                        <div class="aa-promo-banner">
+                          <img [src]="widget.catViewPageData.categoryList[3].storageDataList[0].fileUrl" alt="img">
+                          <div class="aa-prom-content">
+                            <!-- <span>SHOPPING</span> -->
+                            <h4><a
+                                routerLink="/page/{{widget.catViewPageData.categoryList[3].pageOpDto.pageLink}}">{{widget?.catViewPageData?.categoryList[3]?.name}}</a>
+                            </h4>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-4 no-padding">
+                    <div class="aa-promo-left">
+                      <div class="aa-single-promo-left">
+                        <div class="aa-promo-banner">
+                          <img [src]="widget.catViewPageData.categoryList[4].storageDataList[0].fileUrl" alt="img">
+                          <div class="aa-prom-content">
+                            <!-- <span>SHOPPING</span> -->
+                            <h4><a
+                                routerLink="/page/{{widget.catViewPageData.categoryList[4].pageOpDto.pageLink}}">{{widget?.catViewPageData?.categoryList[4]?.name}}</a>
+                            </h4>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="aa-single-promo-left">
+                        <div class="aa-promo-banner">
+                          <img [src]="widget.catViewPageData.categoryList[5].storageDataList[0].fileUrl" alt="img">
+                          <div class="aa-prom-content">
+                            <!-- <span>SHOPPING</span> -->
+                            <h4><a
+                                routerLink="/page/{{widget.catViewPageData.categoryList[5].pageOpDto.pageLink}}">{{widget?.catViewPageData?.categoryList[5]?.name}}</a>
+                            </h4>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row" *ngIf="widget?.catViewPageData?.categoryList?.length === 8">
+                  <!-- promo left -->
+                  <div class="col-md-3 no-padding">
+                    <div class="aa-promo-left">
+                      <div class="aa-single-promo-left">
+                        <div class="aa-promo-banner">
+                          <img [src]="widget.catViewPageData.categoryList[0].storageDataList[0].fileUrl" alt="img">
+                          <div class="aa-prom-content">
+                            <!-- <span>SHOPPING</span> -->
+                            <h4><a
+                                routerLink="/page/{{widget.catViewPageData.categoryList[0].pageOpDto.pageLink}}">{{widget?.catViewPageData?.categoryList[0]?.name}}</a>
+                            </h4>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="aa-single-promo-left">
+                        <div class="aa-promo-banner">
+                          <img [src]="widget.catViewPageData.categoryList[1].storageDataList[0].fileUrl" alt="img">
+                          <div class="aa-prom-content">
+                            <!-- <span>SHOPPING</span> -->
+                            <h4><a
+                                routerLink="/page/{{widget.catViewPageData.categoryList[1].pageOpDto.pageLink}}">{{widget?.catViewPageData?.categoryList[1]?.name}}</a>
+                            </h4>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-3 no-padding">
+                    <div class="aa-promo-left">
+                      <div class="aa-single-promo-left">
+                        <div class="aa-promo-banner">
+                          <img [src]="widget.catViewPageData.categoryList[2].storageDataList[0].fileUrl" alt="img">
+                          <div class="aa-prom-content">
+                            <!-- <span>SHOPPING</span> -->
+                            <h4><a
+                                routerLink="/page/{{widget.catViewPageData.categoryList[2].pageOpDto.pageLink}}">{{widget?.catViewPageData?.categoryList[2]?.name}}</a>
+                            </h4>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="aa-single-promo-left">
+                        <div class="aa-promo-banner">
+                          <img [src]="widget.catViewPageData.categoryList[3].storageDataList[0].fileUrl" alt="img">
+                          <div class="aa-prom-content">
+                            <!-- <span>SHOPPING</span> -->
+                            <h4><a
+                                routerLink="/page/{{widget.catViewPageData.categoryList[3].pageOpDto.pageLink}}">{{widget?.catViewPageData?.categoryList[3]?.name}}</a>
+                            </h4>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-3 no-padding">
+                    <div class="aa-promo-left">
+                      <div class="aa-single-promo-left">
+                        <div class="aa-promo-banner">
+                          <img src="../../assets/img/ajrakh.png" alt="img">
+                          <div class="aa-prom-content">
+                            <!-- <span>SHOPPING</span> -->
+                            <h4><a href="#">Ajrakh</a></h4>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="aa-single-promo-left">
+                        <div class="aa-promo-banner">
+                          <img src="../../assets/img/ajrakh.png" alt="img">
+                          <div class="aa-prom-content">
+                            <!-- <span>SHOPPING</span> -->
+                            <h4><a href="#">Ajrakh</a></h4>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-3 no-padding">
+                    <div class="aa-promo-left">
+                      <div class="aa-single-promo-left">
+                        <div class="aa-promo-banner">
+                          <img [src]="widget.catViewPageData.categoryList[4].storageDataList[0].fileUrl" alt="img">
+                          <div class="aa-prom-content">
+                            <!-- <span>SHOPPING</span> -->
+                            <h4><a
+                                routerLink="/page/{{widget.catViewPageData.categoryList[4].pageOpDto.pageLink}}">{{widget?.catViewPageData?.categoryList[4]?.name}}</a>
+                            </h4>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="aa-single-promo-left">
+                        <div class="aa-promo-banner">
+                          <img [src]="widget.catViewPageData.categoryList[5].storageDataList[0].fileUrl" alt="img">
+                          <div class="aa-prom-content">
+                            <!-- <span>SHOPPING</span> -->
+                            <h4><a
+                                routerLink="/page/{{widget.catViewPageData.categoryList[5].pageOpDto.pageLink}}">{{widget?.catViewPageData?.categoryList[5]?.name}}</a>
+                            </h4>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- / Products section -->
+  <!-- banner section -->
+
+  <section id="aa-promo" *ngIf="widget.widgetType === 'Details'">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="aa-products-header">
+            <div class="aa-product-area">
+              <div class="aa-product-inner">
+                <!-- start prduct navigation -->
+                <ul class="nav nav-tabs aa-products-tab">
+                  <li class="active"><a href="#" data-toggle="tab">{{widget?.name}}</a></li>
+                </ul>
+
+              </div>
+              <div class="aa-support-area">
+                <!-- single support -->
+                <div class="col-md-12 col-sm-12 no-padding col-xs-12">
+                  <div class="aa-support-single" [innerHTML]="widget.shortDescription | safeHtml">
+
+
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section id="aa-support" *ngIf="widget.widgetType === 'Service'">
+
+    <div class="container">
+      <div class="row">
+        <div class="span12 text-center">
+          <ul class="list-inline">
+            <li *ngFor="let img of widget.storageDataList"><div class="aa-support-single">
+              <img [src]="img.fileUrl" />
+              <h4>{{img?.name}}</h4>
+              <!-- <P>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quam, nobis.</P> -->
+            </div></li>
+
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+</ng-container>
+<div bsModal #msgModel="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+  aria-hidden="true" [config]="{backdrop: 'static'}">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body">
+        <button type="button" class="close" (click)="msgModel.hide()">&times;</button>
+        <div class="row p-20">
+          <h4>{{promptMessage}}</h4>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,222 @@
+<section id="aa-product-details" class="aa-product-details">
+  <div class="container aa-product-details-area">
+    <div class="aa-product-details-content">
+      <!-- Modal view slider -->
+      <div class="col-md-5 col-sm-5 col-xs-12">
+        <div class="p-0 col-md-2 col-sm-2 col-xs-12">
+          <div class="p-1">
+            <a *ngFor="let img of product.storageDataList" (click)="product.storageData = img" class="pointer">
+              <img [src]="img.thumbFileUrl" [alt]="img.name">
+            </a>
+
+          </div>
+        </div>
+        <div class="col-md-10 p-0 col-sm-10 col-xs-12">
+          <!-- <div class="aa-product-view-slider">
+          <div class="simpleLens-gallery-container" id="demo-1">
+            <div class="simpleLens-container"> -->
+          <ng-img-magnifier thumbImage="{{product.storageData.smallFileUrl}}"
+            fullImage="{{product.storageData.fileUrl}}" [top]="1" [right]="-125" [lensWidth]="70" [lensHeight]="100"
+            [resultWidth]="120" [resultHeight]="100" [imgWidth]="350" [imgHeight]="450">
+          </ng-img-magnifier>
+        </div>
+        <!-- <div class="simpleLens-big-image-container">
+                <a class="simpleLens-lens-image"
+                  data-lens-image="{{product.storageDataList[0].fileUrl}}">
+                  <img height="500" [src]="product.storageDataList[0].fileUrl"
+                    [alt]="product.storageDataList[0].name" class="simpleLens-big-image">
+                </a>
+              </div> -->
+        <!-- </div>
+            <div class="simpleLens-thumbnails-container">
+              <a *ngFor="let img of product.storageDataList" href="#"
+                class="simpleLens-thumbnail-wrapper" data-lens-image="{{img.fileUrl}}"
+                data-big-image={{img.fileUrl}}>
+                <img height="100" [src]="img.fileUrl" [alt]="img.name">
+              </a>
+            </div>
+          </div>
+        </div> -->
+      </div>
+      <!-- Modal view content -->
+      <div class="col-md-7 col-sm-7 col-xs-12" style="z-index: 3; position: relative;">
+        <div class="aa-product-view-content" id="aa-product-view-content">
+          <h3>{{product.name}}</h3>
+          <ngb-rating [max]=5 [(rate)]="starRating" [readonly]="true"></ngb-rating>
+          <div class="ptb-2" [innerHTML]="product.shortDescription | safeHtml"></div>
+          <div class="aa-price-block">
+            <span class="aa-product-price">MRP : ₹{{product.productStock.discountedRate}}</span>
+            <span class="aa-product-price"><del class="ml-2">₹{{product.productStock.productRate}}</del></span> <br />
+            <small>(Inclusive of all taxes)</small>
+            <p class="aa-product-avilability">Avilability: <span>In stock</span></p>
+          </div>
+
+          <div class="row col-lg-12 col-md-12 col-sm-12 mr-1 ptb-2">
+            <span class="pull-left mt-1">Quantity: </span>
+            <div class="ml-2 wrapper pull-left">
+              <button class="plusminus" (click)="handleProductQtyMinus()">-</button>
+              <input type="number" class="num" value="0" min="0" max="100" [(ngModel)]="productQty" />
+              <button class="plusminus" (click)="handleProductQtyPlus()">+</button>
+            </div>
+            <div class="clear-fix"></div>
+          </div>
+          <div class="row col-lg-12 col-md-12 col-sm-12 mr-1 ptb-2">
+            <span class="pull-left">Category: </span>
+            <div class="ml-2 pull-left">
+              <ng-container *ngFor="let cat of product.productSubDataList">
+                <ng-container *ngIf="cat.dataFor === 'Category'">
+                  <a href="#">{{cat.stringVal}}</a>
+                </ng-container>
+
+              </ng-container>
+            </div>
+            <div class="clear-fix"></div>
+          </div>
+
+          <div class="aa-prod-view-bottom">
+            <a class="aa-add-to-cart-btn" (click)="addPrdToCustomer('Cart',product.id)" href="#">Add To Cart</a>
+            <a class="aa-add-to-cart-btn" (click)="addPrdToCustomer('Cart',product.id)" href="#">Buy Now</a>
+            <a class="aa-add-to-cart-btn" (click)="addPrdToCustomer('Wishlist',product.id)" href="#"> <span class="fa fa-heart"></span> Wishlist</a>
+            <a class="aa-add-to-cart-btn" href="#"> <span class="fa fa-share"></span></a>
+            <!-- <a class="aa-add-to-cart-btn" href="#">Compare</a> -->
+          </div>
+
+          <div class="aa-product-details-bottom ptb-2">
+            <!-- <div class="aa-product-inner">
+              start prduct navigation 
+              <ul class="nav nav-tabs aa-products-tab">
+                <li class="active"><a href="#women" data-toggle="tab">Description</a></li>
+              </ul>
+
+            </div> -->
+            <ul class="nav nav-tabs">
+              <li><a href="#description" data-toggle="tab">Product Details</a></li>
+              <li><a href="#others" data-toggle="tab">Others</a></li>
+            </ul>
+
+            <!-- Tab panes -->
+            <div class="tab-content">
+              <div [innerHTML]="product.description | safeHtml" class="tab-pane ptb-2 fade in active" id="description">
+
+              </div>
+              <div class="tab-pane fade ptb-2" [innerHTML]="product.specifications | safeHtml" id="others">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="aa-product-details-bottom">
+        <div class="col-12 col-lg-12 col-md-12 col-sm-12">
+          <div class="aa-product-inner">
+            <!-- start prduct navigation -->
+            <ul class="nav nav-tabs aa-products-tab">
+              <li class="active"><a href="#women" data-toggle="tab">Review</a></li>
+            </ul>
+  
+          </div>
+  
+          <!-- Tab panes -->
+          <div class="tab-content">
+  
+            <div>
+              <div class="aa-product-review-area">
+                <h4>{{product.reviewList.length}} Reviews for {{product.name}}</h4>
+                <ul class="aa-review-nav">
+                  <li *ngFor="let review of product.reviewList;">
+                    <div class="media">
+                      <div class="media-left">
+                        <a href="#">
+                          <img class="media-object" src="../../assets/img/profile-icon.png" alt="profile image">
+                        </a>
+                      </div>
+                      <div class="media-body">
+                        <h4 class="media-heading"><strong>{{review.userName}}</strong> - <span>{{review.reviewOn}}</span></h4>
+                        <div *ngIf="review.reviewPoint === 4" class="aa-product-rating">
+                          <span class="fa fa-star"></span>
+                          <span class="fa fa-star"></span>
+                          <span class="fa fa-star"></span>
+                          <span class="fa fa-star"></span>
+                          <span class="fa fa-star-o"></span>
+                        </div>
+                        <div *ngIf="review.reviewPoint === 3" class="aa-product-rating">
+                          <span class="fa fa-star"></span>
+                          <span class="fa fa-star"></span>
+                          <span class="fa fa-star"></span>
+                          <span class="fa fa-star-o"></span>
+                          <span class="fa fa-star-o"></span>
+                        </div>
+                        <div *ngIf="review.reviewPoint === 2" class="aa-product-rating">
+                          <span class="fa fa-star"></span>
+                          <span class="fa fa-star"></span>
+                          <span class="fa fa-star-o"></span>
+                          <span class="fa fa-star-o"></span>
+                          <span class="fa fa-star-o"></span>
+                        </div>
+                        <div *ngIf="review.reviewPoint === 1" class="aa-product-rating">
+                          <span class="fa fa-star"></span>
+                          <span class="fa fa-star-o"></span>
+                          <span class="fa fa-star-o"></span>
+                          <span class="fa fa-star-o"></span>
+                          <span class="fa fa-star-o"></span>
+                        </div>
+                        <div *ngIf="review.reviewPoint === 5" class="aa-product-rating">
+                          <span class="fa fa-star"></span>
+                          <span class="fa fa-star"></span>
+                          <span class="fa fa-star"></span>
+                          <span class="fa fa-star"></span>
+                          <span class="fa fa-star"></span>
+                        </div>
+                        <p>{{review.reviewMsg}}</p>
+                      </div>
+                    </div>
+                  </li>
+                 
+                </ul>
+                <h4>Add a review</h4>
+                <div class="aa-your-rating">
+                  <p>Your Rating</p>
+                  <ngb-rating [max]=5 [(rate)]="productReview.reviewPoint"></ngb-rating>
+                </div>
+                <!-- review form -->
+                <form action="" class="aa-review-form" (submit)="reviewFormSubmit()">
+                  <div class="form-group">
+                    <label for="message">Your Review</label>
+                    <textarea class="form-control" [(ngModel)]="productReview.reviewMsg" rows="3" id="message"></textarea>
+                  </div>
+                  <ng-container *ngIf="!isLoggedIn">
+                    <div class="form-group">
+                      <label for="name">Name</label>
+                      <input type="text" class="form-control" id="name"  [(ngModel)]="productReview.userName"  placeholder="Name">
+                    </div>
+                    <div class="form-group">
+                      <label for="email">Email</label>
+                      <input type="email" class="form-control" id="email" [(ngModel)]="productReview.userEmail" placeholder="example@gmail.com">
+                    </div>
+    
+                  </ng-container>
+                  
+                  <button type="submit" class="btn btn-default aa-review-submit">Submit</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+</section>
+<div bsModal #msgModel="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+  aria-hidden="true" [config]="{backdrop: 'static'}">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body">
+        <button type="button" class="close" (click)="msgModel.hide()">&times;</button>
+        <div class="row p-20">
+          <h4>{{promptMessage}}</h4>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

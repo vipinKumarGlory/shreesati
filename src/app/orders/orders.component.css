@@ -1,0 +1,3 @@
+.filterHeight{
+  min-height: calc(100vh - 32rem);
+}
